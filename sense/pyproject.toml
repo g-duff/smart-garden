@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dependencies = ["adafruit-circuitpython-dht==4.0.4"]
+name = "smart-garden-sense"
+version = "0.0.0"
+authors = [
+  { name="George Duffett" },
+]
+description = "Smart Garden Sensors"
+readme = "README.md"
+requires-python = "==3.11.2"
+classifiers = [
+    "Topic :: Software Development :: Embedded Systems",
+    "Topic :: System :: Hardware",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[project.urls]
+"Homepage" = "https://github.com/g-duff/smart-garden"
+"Bug Tracker" = "https://github.com/g-duff/smart-garden/issues"
