@@ -3,25 +3,28 @@ import logging
 
 from readers.temperature import read_temperature
 from readers.humidity import read_humidity
+from readers.moisture import read_moisture
 
 
 @dataclass
 class SensorData:
-    temperature: float
     humidity: float
-    moisture_plant1: float
-    moisture_plant2: float
+    moisture_0: float
+    moisture_1: float
+    temperature: float
 
 
 def read() -> SensorData: 
-    temperature = read_temperature()
     humidity = read_humidity()
+    moisture_0 = read_moisture(0)
+    moisture_1 = read_moisture(1)
+    temperature = read_temperature()
 
     return SensorData(
-            temperature=temperature if temperature is float else 0,
             humidity=humidity if humidity is float else 0,
-            moisture_plant1=0,
-            moisture_plant2=0
+            moisture_0=moisture_0,
+            moisture_1=moisture_1,
+            temperature=temperature if temperature is float else 0,
         )
 
 
@@ -30,7 +33,7 @@ def write(data: SensorData):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     logger = logging.getLogger(__name__)
     logger.info('Started')
     data = read()
