@@ -13,8 +13,45 @@ DATABASE_PATH = "/home/pi/smart-garden/store/garden.db"
 def plant(name):
     match request.method:
         case "GET":
-            return {}
+            from_date = request.args.get('from', datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).isoformat())
+            to_date = request.args.get('to', datetime.datetime.now().isoformat())
+
+            database_connection = sqlite3.connect("/home/pi/smart-garden/store/garden.db")
+            with database_connection:
+                res = database_connection.execute(f"SELECT timestamp, moisture_percent, moisture_voltage FROM plant WHERE name = \'{name}\' and timestamp >= '{from_date}' and timestamp < '{to_date}';")
+                readings = res.fetchall()
+            database_connection.close()
+
+            formatted_readings = [{
+                "timestamp": timestamp,
+                "moisture_percent": moisture_percent,
+                "moisture_voltage": moisture_voltage,
+                } for timestamp, moisture_percent, moisture_voltage in readings]           
+
+            return formatted_readings
+
         case "POST":
+            content = request.json
+            app.logger.debug(content)
+
+            if "timestamp" not in content \
+                    or "moisture_percent" not in content \
+                    or "moisture_voltage" not in content:
+                return {"error": "missing parameter"}, 400
+
+            moisture_percent = content["moisture_percent"]
+            moisture_voltage = content["moisture_voltage"]
+            timestamp = content["timestamp"]
+
+            database_connection = sqlite3.connect("/home/pi/smart-garden/store/garden.db")
+            with database_connection:
+                database_connection.execute(f"""INSERT INTO plant 
+                    (timestamp, "name", moisture_percent, moisture_voltage) 
+                    VALUES (\"{timestamp}\", \"{name}\", {moisture_percent:.0f}, {moisture_voltage:.2f});
+                """)
+            database_connection.close()
+
+
             return {}
 
 
