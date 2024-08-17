@@ -1,10 +1,16 @@
+import configparser
 import json
 import logging
 import urllib.request
 
+
 logger = logging.getLogger(__name__)
 
 def write_location_data(timestamp, humidity, temperature):
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    hostname = config['Server']['Host']
+
     body = {
         "timestamp": timestamp,
         "humidity": humidity,
@@ -13,7 +19,7 @@ def write_location_data(timestamp, humidity, temperature):
     jsondata = json.dumps(body)
     jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
 
-    req = urllib.request.Request("http://localhost:5000/json/location/kitchen")
+    req = urllib.request.Request(f"http://{hostname}/json/location/kitchen")
     req.add_header('Content-Type', 'application/json; charset=utf-8')
 
     response = urllib.request.urlopen(req, jsondataasbytes)
