@@ -1,6 +1,7 @@
 # Credit:
 # https://github.com/AnaviTechnology/anavi-examples/blob/master/anavi-gardening-uhat/soil-moistore-sensors/python/soil-moistore-sensors.py
 import logging
+import configparser
 
 import spidev
 
@@ -10,6 +11,15 @@ logger = logging.getLogger(__name__)
 
 def read_moisture(sensor_channel: float) -> tuple[float, float]:
     logger.info(f'Reading moisture channel {sensor_channel}...')
+
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    for key in config:
+        print(key)
+
+    wet_voltage = config.getfloat(f'Moisture {sensor_channel}', 'WetVoltage')
+    dry_voltage = config.getfloat(f'Moisture {sensor_channel}', 'DryVoltage')
 
     # Enable SPI
     spi_ch = 0
@@ -22,7 +32,7 @@ def read_moisture(sensor_channel: float) -> tuple[float, float]:
     if rounded_voltage < 0.5:
         moisture = 0
     else:
-        moisture = round(voltage_to_moisture(rounded_voltage, 3.6, 1.5, 0, 100), 0)
+        moisture = round(voltage_to_moisture(rounded_voltage, dry_voltage, wet_voltage, 0, 100), 0)
     logger.info(f'Moisture: {moisture}')
     return moisture, voltage
 
