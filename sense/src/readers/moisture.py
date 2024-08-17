@@ -8,7 +8,7 @@ import spidev
 logger = logging.getLogger(__name__)
 
 
-def read_moisture(sensor_channel: float) -> float:
+def read_moisture(sensor_channel: float) -> tuple[float, float]:
     logger.info(f'Reading moisture channel {sensor_channel}...')
 
     # Enable SPI
@@ -24,7 +24,7 @@ def read_moisture(sensor_channel: float) -> float:
     else:
         moisture = round(voltage_to_moisture(rounded_voltage, 5, 3.5, 0, 100), 0)
     logger.info(f'Moisture: {moisture}')
-    return moisture
+    return moisture, voltage
 
 
 def read_voltage(spi, channel):
