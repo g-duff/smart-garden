@@ -23,11 +23,11 @@ if __name__ == '__main__':
             temperature=temperature if temperature else 0,
     )
 
-    moisture_0_percent, moisture_0_voltage = read_moisture(0)
+    moisture_1_percent, moisture_1_voltage = read_moisture(1)
     write_plant_data(
             timestamp=datetime.now().isoformat(),
-            moisture_percent=moisture_0_percent,
-            moisture_voltage=moisture_0_voltage,
+            moisture_percent=moisture_1_percent,
+            moisture_voltage=moisture_1_voltage,
     )
 
     logger.info('Finished')

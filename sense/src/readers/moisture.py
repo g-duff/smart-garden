@@ -27,11 +27,12 @@ def read_moisture(sensor_channel: float) -> tuple[float, float]:
     return moisture, voltage
 
 
-def read_voltage(spi, channel):
+def read_voltage(spi, sensor_channel):
 
     # Make sure ADC channel is 0 or 1
-    if channel != 0:
-        channel = 1
+    adc_channel = sensor_channel - 1
+    if adc_channel != 0:
+        adc_channel = 1
 
     # Construct SPI message
     #  First bit (Start): Logic high (1)
@@ -40,7 +41,7 @@ def read_voltage(spi, channel):
     #  Fourth bit (MSFB): 0 for LSB first
     #  Next 12 bits: 0 (don't care)
     msg = 0b11
-    msg = ((msg << 1) + channel) << 5
+    msg = ((msg << 1) + adc_channel) << 5
     msg = [msg, 0b00000000]
     reply = spi.xfer2(msg)
 
