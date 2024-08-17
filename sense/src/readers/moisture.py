@@ -22,7 +22,7 @@ def read_moisture(sensor_channel: float) -> tuple[float, float]:
     if rounded_voltage < 0.5:
         moisture = 0
     else:
-        moisture = round(voltage_to_moisture(rounded_voltage, 5, 3.5, 0, 100), 0)
+        moisture = round(voltage_to_moisture(rounded_voltage, 3.6, 1.5, 0, 100), 0)
     logger.info(f'Moisture: {moisture}')
     return moisture, voltage
 
