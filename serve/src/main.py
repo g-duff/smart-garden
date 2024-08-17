@@ -40,6 +40,7 @@ def location(name):
             return formatted_readings
         case "POST":
             content = request.json
+            app.logger.debug(content)
 
             if "humidity" not in content \
                     or "timestamp" not in content \
