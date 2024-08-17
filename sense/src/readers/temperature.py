@@ -9,7 +9,7 @@ import board
 logger = logging.getLogger(__name__)
 
 
-def read_temperature() -> Optional[float]:
+def read_temperature() -> Optional[int|float]:
     sensor = adafruit_dht.DHT11(board.D4)
 
     while True:

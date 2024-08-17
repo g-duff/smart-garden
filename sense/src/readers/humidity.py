@@ -9,7 +9,7 @@ import board
 logger = logging.getLogger(__name__)
 
 
-def read_humidity() -> Optional[float]:
+def read_humidity() -> Optional[int|float]:
     sensor = adafruit_dht.DHT11(board.D4)
 
     while True:
