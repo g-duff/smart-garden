@@ -15,9 +15,6 @@ def read_moisture(sensor_channel: float) -> tuple[float, float]:
     config = configparser.ConfigParser()
     config.read('config.ini')
 
-    for key in config:
-        print(key)
-
     wet_voltage = config.getfloat(f'Moisture {sensor_channel}', 'WetVoltage')
     dry_voltage = config.getfloat(f'Moisture {sensor_channel}', 'DryVoltage')
 
