@@ -58,17 +58,9 @@ def location(name):
             from_date = request.args.get('from', datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).isoformat())
             to_date = request.args.get('to', datetime.datetime.now().isoformat())
 
-            database_connection = sqlite3.connect("/home/pi/smart-garden/store/garden.db")
-            with database_connection:
-                res = database_connection.execute(f"SELECT timestamp, humidity, temperature FROM location WHERE name = \'{name}\' and timestamp >= '{from_date}' and timestamp < '{to_date}';")
-                readings = res.fetchall()
+            database_connection = Database()
+            formatted_readings = database_connection.select_locations([name], from_date, to_date)
             database_connection.close()
-
-            formatted_readings = [{
-                "timestamp": timestamp,
-                "humidity": humidity,
-                "temperature": temperature,
-                } for timestamp, humidity, temperature in readings]           
 
             return formatted_readings
         case "POST":
