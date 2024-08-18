@@ -35,20 +35,15 @@ def plant(name):
                     or "moisture_voltage" not in content:
                 return {"error": "missing parameter"}, 400
 
-            moisture_percent = content["moisture_percent"]
-            moisture_voltage = content["moisture_voltage"]
-            timestamp = content["timestamp"]
-
-            database_connection = sqlite3.connect("/home/pi/smart-garden/store/garden.db")
-            with database_connection:
-                database_connection.execute(f"""INSERT INTO plant 
-                    (timestamp, "name", moisture_percent, moisture_voltage) 
-                    VALUES (\"{timestamp}\", \"{name}\", {moisture_percent:.0f}, {moisture_voltage:.2f});
-                """)
+            database_connection = Database()
+            database_connection.insert_plant(name,
+                moisture_percent = content["moisture_percent"],
+                moisture_voltage = content["moisture_voltage"],
+                timestamp = content["timestamp"],
+            )
             database_connection.close()
 
-
-            return {}
+            return ('', 204)
 
 
 @app.route("/json/location/<name>", methods=["GET", "POST"])
@@ -72,19 +67,16 @@ def location(name):
                     or "temperature" not in content:
                 return {"error": "missing parameter"}, 400
 
-            humidity = content["humidity"]
-            temperature = content["temperature"]
-            timestamp = content["timestamp"]
-
-            database_connection = sqlite3.connect("/home/pi/smart-garden/store/garden.db")
-            with database_connection:
-                database_connection.execute(f"""INSERT INTO location 
-                    (timestamp, "name", humidity, temperature) 
-                    VALUES (\"{timestamp}\", \"{name}\", {humidity:0.2f}, {temperature:0.1f});
-                """)
+            database_connection = Database()
+            database_connection.insert_loctation(
+                name, 
+                temperature = content["temperature"],
+                timestamp = content["timestamp"],
+                humidity = content["humidity"],
+                )
             database_connection.close()
 
-            return {}
+            return ('', 204)
 
 
 if __name__ == '__main__':
