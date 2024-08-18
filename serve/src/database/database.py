@@ -11,5 +11,23 @@ class Database:
 
         self.database_connection = sqlite3.connect(database_path)
 
+    def select_plants(self, names: list[str], from_date: str, to_date: str):
+        formatted_names = ", ".join(f"'{n}'" for n in names)
+        with self.database_connection:
+            res = self.database_connection.execute(
+                f"""SELECT timestamp, moisture_percent, moisture_voltage
+                FROM plant WHERE name in ({formatted_names})
+                AND timestamp >= '{from_date}' AND timestamp < '{to_date}';"""
+                )
+        readings = res.fetchall()
+
+        formatted_readings = [{
+            "timestamp": timestamp,
+            "moisture_percent": moisture_percent,
+            "moisture_voltage": moisture_voltage,
+            } for timestamp, moisture_percent, moisture_voltage in readings]
+
+        return formatted_readings
+
     def close(self):
         self.database_connection.close()
