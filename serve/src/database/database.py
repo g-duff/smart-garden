@@ -18,6 +18,13 @@ class Database:
                 VALUES (\"{timestamp}\", \"{name}\", {moisture_percent:.0f}, {moisture_voltage:.2f});
                 """)
 
+    def insert_loctation(self, name, timestamp, humidity, temperature):
+            with self.connection:
+                self.connection.execute(f"""INSERT INTO location 
+                    (timestamp, "name", humidity, temperature) 
+                    VALUES (\"{timestamp}\", \"{name}\", {humidity:0.2f}, {temperature:0.1f});
+                """)
+
     def select_locations(self, names: list[str], from_date: str, to_date: str):
         formatted_names = ", ".join(f"'{n}'" for n in names)
 
