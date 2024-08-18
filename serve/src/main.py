@@ -3,6 +3,8 @@ import sqlite3
 
 from flask import Flask, request
 
+from database.database import Database
+
 app = Flask(__name__)
 
 
@@ -13,20 +15,14 @@ DATABASE_PATH = "/home/pi/smart-garden/store/garden.db"
 def plant(name):
     match request.method:
         case "GET":
-            from_date = request.args.get('from', datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).isoformat())
+            from_date = request.args.get('from', datetime.datetime.now().replace(
+                hour=0, minute=0, second=0, microsecond=0
+                ).isoformat())
             to_date = request.args.get('to', datetime.datetime.now().isoformat())
 
-            database_connection = sqlite3.connect("/home/pi/smart-garden/store/garden.db")
-            with database_connection:
-                res = database_connection.execute(f"SELECT timestamp, moisture_percent, moisture_voltage FROM plant WHERE name = \'{name}\' and timestamp >= '{from_date}' and timestamp < '{to_date}';")
-                readings = res.fetchall()
+            database_connection = Database()
+            formatted_readings = database_connection.select_plants([name], from_date, to_date)
             database_connection.close()
-
-            formatted_readings = [{
-                "timestamp": timestamp,
-                "moisture_percent": moisture_percent,
-                "moisture_voltage": moisture_voltage,
-                } for timestamp, moisture_percent, moisture_voltage in readings]           
 
             return formatted_readings
 
