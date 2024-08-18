@@ -1,14 +1,10 @@
 import datetime
-import sqlite3
 
 from flask import Flask, request
 
 from database.database import Database
 
 app = Flask(__name__)
-
-
-DATABASE_PATH = "/home/pi/smart-garden/store/garden.db"
 
 
 @app.route("/json/plant/<name>", methods=["GET", "POST"])
