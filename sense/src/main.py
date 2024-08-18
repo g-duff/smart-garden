@@ -26,6 +26,7 @@ if __name__ == '__main__':
 
     moisture_1_percent, moisture_1_voltage = read_moisture(1)
     write_plant_data(
+            'basil',
             timestamp=datetime.now().isoformat(),
             moisture_percent=moisture_1_percent,
             moisture_voltage=moisture_1_voltage,
