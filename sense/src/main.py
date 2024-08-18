@@ -18,6 +18,7 @@ if __name__ == '__main__':
     temperature = read_temperature()
 
     write_location_data(
+            'kitchen',
             timestamp=datetime.now().isoformat(),
             humidity=humidity if humidity else 0,
             temperature=temperature if temperature else 0,
