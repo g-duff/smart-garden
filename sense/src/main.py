@@ -32,4 +32,12 @@ if __name__ == '__main__':
             moisture_voltage=moisture_1_voltage,
     )
 
+    moisture_2_percent, moisture_2_voltage = read_moisture(2)
+    write_plant_data(
+            'rosemary',
+            timestamp=datetime.now().isoformat(),
+            moisture_percent=moisture_2_percent,
+            moisture_voltage=moisture_2_voltage,
+    )
+
     logger.info('Finished')
