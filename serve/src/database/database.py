@@ -9,13 +9,13 @@ class Database:
         config.read('config.ini')
         database_path = config['SQLite3']['Path']
 
-        self.database_connection = sqlite3.connect(database_path)
+        self.connection = sqlite3.connect(database_path)
 
     def select_locations(self, names: list[str], from_date: str, to_date: str):
         formatted_names = ", ".join(f"'{n}'" for n in names)
 
-        with self.database_connection:
-            res = self.database_connection.execute(
+        with self.connection:
+            res = self.connection.execute(
                 f"""SELECT timestamp, humidity, temperature 
                 FROM location 
                 WHERE name in ({formatted_names}) 
@@ -33,8 +33,8 @@ class Database:
 
     def select_plants(self, names: list[str], from_date: str, to_date: str):
         formatted_names = ", ".join(f"'{n}'" for n in names)
-        with self.database_connection:
-            res = self.database_connection.execute(
+        with self.connection:
+            res = self.connection.execute(
                 f"""SELECT timestamp, moisture_percent, moisture_voltage
                 FROM plant WHERE name in ({formatted_names})
                 AND timestamp >= '{from_date}' AND timestamp < '{to_date}';"""
@@ -50,4 +50,4 @@ class Database:
         return formatted_readings
 
     def close(self):
-        self.database_connection.close()
+        self.connection.close()
