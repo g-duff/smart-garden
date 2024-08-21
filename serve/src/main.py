@@ -2,7 +2,7 @@ import datetime
 
 from flask import Flask, request
 
-from database.database import Database
+from data.database import Database
 
 app = Flask(__name__)
 
