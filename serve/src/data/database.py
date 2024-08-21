@@ -1,6 +1,7 @@
 import sqlite3
 import configparser
 
+from .objects import Location, Plant
 
 class Database:
 
@@ -27,11 +28,11 @@ class Database:
                 (timestamp, name, humidity, temperature)
                 )
 
-    def select_locations(self, names: list[str], from_date: str, to_date: str):
+    def select_locations(self, names: list[str], from_date: str, to_date: str) -> list[Location]:
         in_placeholders = ", ".join("?" * len(names))
         with self.connection:
             res = self.connection.execute(
-                f"""SELECT timestamp, humidity, temperature 
+                f"""SELECT name, timestamp, humidity, temperature 
                 FROM location 
                 WHERE name in ({in_placeholders}) 
                 AND timestamp >= ? AND timestamp < ?;""",
@@ -39,30 +40,25 @@ class Database:
                 )
         readings = res.fetchall()
 
-        formatted_readings = [{
-            "timestamp": timestamp,
-            "humidity": humidity,
-            "temperature": temperature,
-            } for timestamp, humidity, temperature in readings]           
+        formatted_readings = [Location(name, timestamp, humidity, temperature) 
+            for name, timestamp, humidity, temperature in readings]           
 
         return formatted_readings
 
-    def select_plants(self, names: list[str], from_date: str, to_date: str):
+    def select_plants(self, names: list[str], from_date: str, to_date: str) -> list[Plant]:
         in_placeholders = ", ".join("?" * len(names))
         with self.connection:
             res = self.connection.execute(
-                f"""SELECT timestamp, moisture_percent, moisture_voltage
+                f"""SELECT name, timestamp, moisture_percent, moisture_voltage
                 FROM plant WHERE name in ({in_placeholders})
                 AND timestamp >= ? AND timestamp < ?;""",
                 (*names, from_date, to_date)
                 )
         readings = res.fetchall()
 
-        formatted_readings = [{
-            "timestamp": timestamp,
-            "moisture_percent": moisture_percent,
-            "moisture_voltage": moisture_voltage,
-            } for timestamp, moisture_percent, moisture_voltage in readings]
+        formatted_readings = [Plant(
+            name, timestamp, moisture_percent, moisture_voltage) 
+        for name, timestamp, moisture_percent, moisture_voltage in readings]
 
         return formatted_readings
 
