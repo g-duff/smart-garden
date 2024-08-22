@@ -5,8 +5,8 @@ from dataclasses import dataclass
 class Location:
     name: str
     timestamp: str
-    temperature: float
     humidity: float
+    temperature: float
 
 
 @dataclass

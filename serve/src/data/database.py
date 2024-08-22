@@ -40,8 +40,9 @@ class Database:
                 )
         readings = res.fetchall()
 
-        formatted_readings = [Location(name, timestamp, humidity, temperature) 
-            for name, timestamp, humidity, temperature in readings]           
+        formatted_readings = [Location(
+            name=n, timestamp=ts, humidity=hmd, temperature=tmp
+            ) for n, ts, hmd, tmp in readings]           
 
         return formatted_readings
 
@@ -57,8 +58,8 @@ class Database:
         readings = res.fetchall()
 
         formatted_readings = [Plant(
-            name, timestamp, moisture_percent, moisture_voltage) 
-        for name, timestamp, moisture_percent, moisture_voltage in readings]
+            name=n, timestamp=ts, moisture_percent=mp, moisture_voltage=mv
+            ) for n, ts, mp, mv in readings]
 
         return formatted_readings
 
