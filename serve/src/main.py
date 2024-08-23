@@ -44,7 +44,9 @@ def plant(name):
 def environment(name):
     match request.method:
         case "GET":
-            from_date = request.args.get('from', datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).isoformat())
+            from_date = request.args.get('from', datetime.datetime.now().replace(
+                hour=0, minute=0, second=0, microsecond=0
+                ).isoformat())
             to_date = request.args.get('to', datetime.datetime.now().isoformat())
 
             database_connection = Database()
@@ -52,6 +54,7 @@ def environment(name):
             database_connection.close()
 
             return formatted_readings
+
         case "POST":
             content = request.json
             app.logger.debug(content)
