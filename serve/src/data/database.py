@@ -12,20 +12,20 @@ class Database:
 
         self.connection = sqlite3.connect(database_path)
 
-    def insert_plants(self, plants: list[Plant]):
-        with self.connection:
-            self.connection.executemany("""INSERT INTO plant 
-                (name, timestamp, moisture_percent, moisture_voltage) 
-                VALUES (?, ?, ?, ?);""",
-                ((p.name, p.timestamp, p.moisture_percent, p.moisture_voltage) for p in plants),
-                )
-
     def insert_environments(self, environments: list[Environment]):
         with self.connection:
             self.connection.executemany(f"""INSERT INTO environment 
                 (timestamp, name, humidity, temperature) 
                 VALUES (?, ?, ?, ?);""",
                 ((e.timestamp, e.name, e.humidity, e.temperature) for e in environments)
+                )
+
+    def insert_plants(self, plants: list[Plant]):
+        with self.connection:
+            self.connection.executemany("""INSERT INTO plant 
+                (name, timestamp, moisture_percent, moisture_voltage) 
+                VALUES (?, ?, ?, ?);""",
+                ((p.name, p.timestamp, p.moisture_percent, p.moisture_voltage) for p in plants),
                 )
 
     def select_environments(self, names: list[str], from_date: str, to_date: str) -> list[Environment]:
