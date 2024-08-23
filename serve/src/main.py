@@ -3,7 +3,7 @@ import datetime
 from flask import Flask, request
 
 from data.database import Database
-from data.objects import Plant
+from data.objects import Environment, Plant
 
 app = Flask(__name__)
 
@@ -56,18 +56,14 @@ def environment(name):
             content = request.json
             app.logger.debug(content)
 
-            if "humidity" not in content \
-                    or "timestamp" not in content \
-                    or "temperature" not in content:
-                return {"error": "missing parameter"}, 400
+            envrionments = []
+            try:
+                envrionments.append(Environment(name, **content))
+            except TypeError:
+                return ({"error": "missing parameter"}, 400)
 
             database_connection = Database()
-            database_connection.insert_environment(
-                name, 
-                temperature = content["temperature"],
-                timestamp = content["timestamp"],
-                humidity = content["humidity"],
-                )
+            database_connection.insert_environments(envrionments)
             database_connection.close()
 
             return ('', 204)

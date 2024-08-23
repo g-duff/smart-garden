@@ -20,12 +20,12 @@ class Database:
                 ((p.name, p.timestamp, p.moisture_percent, p.moisture_voltage) for p in plants),
                 )
 
-    def insert_environment(self, name, timestamp, humidity, temperature):
+    def insert_environments(self, environments: list[Environment]):
         with self.connection:
-            self.connection.execute(f"""INSERT INTO environment 
+            self.connection.executemany(f"""INSERT INTO environment 
                 (timestamp, name, humidity, temperature) 
                 VALUES (?, ?, ?, ?);""",
-                (timestamp, name, humidity, temperature)
+                ((e.timestamp, e.name, e.humidity, e.temperature) for e in environments)
                 )
 
     def select_environments(self, names: list[str], from_date: str, to_date: str) -> list[Environment]:
