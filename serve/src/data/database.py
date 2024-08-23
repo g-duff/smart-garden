@@ -12,12 +12,12 @@ class Database:
 
         self.connection = sqlite3.connect(database_path)
 
-    def insert_plant(self, name, timestamp, moisture_percent, moisture_voltage):
+    def insert_plants(self, plants: list[Plant]):
         with self.connection:
-            self.connection.execute("""INSERT INTO plant 
-                (timestamp, name, moisture_percent, moisture_voltage) 
+            self.connection.executemany("""INSERT INTO plant 
+                (name, timestamp, moisture_percent, moisture_voltage) 
                 VALUES (?, ?, ?, ?);""",
-                (timestamp, name, moisture_percent, moisture_voltage),
+                ((p.name, p.timestamp, p.moisture_percent, p.moisture_voltage) for p in plants),
                 )
 
     def insert_environment(self, name, timestamp, humidity, temperature):

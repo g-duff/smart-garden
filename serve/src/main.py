@@ -3,6 +3,7 @@ import datetime
 from flask import Flask, request
 
 from data.database import Database
+from data.objects import Plant
 
 app = Flask(__name__)
 
@@ -26,17 +27,14 @@ def plant(name):
             content = request.json
             app.logger.debug(content)
 
-            if "timestamp" not in content \
-                    or "moisture_percent" not in content \
-                    or "moisture_voltage" not in content:
-                return {"error": "missing parameter"}, 400
+            plants = []
+            try:
+                plants.append(Plant(name, **content))
+            except TypeError:
+                return ({"error": "missing parameter"}, 400)
 
             database_connection = Database()
-            database_connection.insert_plant(name,
-                moisture_percent = content["moisture_percent"],
-                moisture_voltage = content["moisture_voltage"],
-                timestamp = content["timestamp"],
-            )
+            database_connection.insert_plants(plants)
             database_connection.close()
 
             return ('', 204)
