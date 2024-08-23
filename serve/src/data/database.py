@@ -1,7 +1,7 @@
 import sqlite3
 import configparser
 
-from .objects import Location, Plant
+from .objects import Environment, Plant
 
 class Database:
 
@@ -20,7 +20,7 @@ class Database:
                 (timestamp, name, moisture_percent, moisture_voltage),
                 )
 
-    def insert_loctation(self, name, timestamp, humidity, temperature):
+    def insert_environment(self, name, timestamp, humidity, temperature):
         with self.connection:
             self.connection.execute(f"""INSERT INTO environment 
                 (timestamp, name, humidity, temperature) 
@@ -28,7 +28,7 @@ class Database:
                 (timestamp, name, humidity, temperature)
                 )
 
-    def select_locations(self, names: list[str], from_date: str, to_date: str) -> list[Location]:
+    def select_environments(self, names: list[str], from_date: str, to_date: str) -> list[Environment]:
         in_placeholders = ", ".join("?" * len(names))
         with self.connection:
             res = self.connection.execute(
@@ -40,7 +40,7 @@ class Database:
                 )
         readings = res.fetchall()
 
-        formatted_readings = [Location(
+        formatted_readings = [Environment(
             name=n, timestamp=ts, humidity=hmd, temperature=tmp
             ) for n, ts, hmd, tmp in readings]           
 

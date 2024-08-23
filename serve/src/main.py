@@ -42,15 +42,15 @@ def plant(name):
             return ('', 204)
 
 
-@app.route("/json/location/<name>", methods=["GET", "POST"])
-def location(name):
+@app.route("/json/environment/<name>", methods=["GET", "POST"])
+def environment(name):
     match request.method:
         case "GET":
             from_date = request.args.get('from', datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).isoformat())
             to_date = request.args.get('to', datetime.datetime.now().isoformat())
 
             database_connection = Database()
-            formatted_readings = database_connection.select_locations([name], from_date, to_date)
+            formatted_readings = database_connection.select_environments([name], from_date, to_date)
             database_connection.close()
 
             return formatted_readings
@@ -64,7 +64,7 @@ def location(name):
                 return {"error": "missing parameter"}, 400
 
             database_connection = Database()
-            database_connection.insert_loctation(
+            database_connection.insert_environment(
                 name, 
                 temperature = content["temperature"],
                 timestamp = content["timestamp"],

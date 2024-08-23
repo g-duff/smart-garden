@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Location:
+class Environment:
     name: str
     timestamp: str
     humidity: float
