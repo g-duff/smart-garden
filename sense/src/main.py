@@ -5,7 +5,7 @@ from readers.temperature import read_temperature
 from readers.humidity import read_humidity
 from readers.moisture import read_moisture
 
-from writers.location import write_location_data
+from writers.environment import write_environment_data
 from writers.plant import write_plant_data
 
 
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     humidity = read_humidity()
     temperature = read_temperature()
 
-    write_location_data(
+    write_environment_data(
             'kitchen',
             timestamp=datetime.now().isoformat(),
             humidity=humidity if humidity else 0,

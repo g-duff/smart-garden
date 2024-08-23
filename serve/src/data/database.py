@@ -22,7 +22,7 @@ class Database:
 
     def insert_loctation(self, name, timestamp, humidity, temperature):
         with self.connection:
-            self.connection.execute(f"""INSERT INTO location 
+            self.connection.execute(f"""INSERT INTO environment 
                 (timestamp, name, humidity, temperature) 
                 VALUES (?, ?, ?, ?);""",
                 (timestamp, name, humidity, temperature)
@@ -33,7 +33,7 @@ class Database:
         with self.connection:
             res = self.connection.execute(
                 f"""SELECT name, timestamp, humidity, temperature 
-                FROM location 
+                FROM environment 
                 WHERE name in ({in_placeholders}) 
                 AND timestamp >= ? AND timestamp < ?;""",
                 (*names, from_date, to_date)
