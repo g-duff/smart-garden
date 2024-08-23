@@ -1,7 +1,7 @@
 import sqlite3
 
 DATABASE_FILE = 'garden.db'
-MIGRATION_SCRIPT = 'v0.sql'
+MIGRATION_SCRIPT = 'v0_1.sql'
 
 with open(MIGRATION_SCRIPT, 'r') as sql_file:
     sql_script = sql_file.read()
