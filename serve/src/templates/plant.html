@@ -19,7 +19,7 @@
 		}));
 
 		const ctx = document.getElementById('myChart');
-		
+
 		new Chart(ctx, {
 			type: 'line',
 			options: {
@@ -37,7 +37,7 @@
 					x: { type: 'time' },
 				}
 			},
-			data: { datasets: [ 
+			data: { datasets: [
 				{ label: 'Moisture', data: plantMoistureData, yAxisID: 'moisture' },
 				{ label: 'Voltage', data: plantVoltageData, yAxisID: 'voltage' },
 			] }
