@@ -1,0 +1,46 @@
+<div>
+	<canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+	function main(rawEnvironmentData) {
+		const environmentTemperatureData = rawEnvironmentData.map(({temperature, timestamp}) => ({
+			x: timestamp,
+			y: temperature,
+		}));
+
+		const environmentHumidityData = rawEnvironmentData.map(({humidity, timestamp}) => ({
+			x: timestamp,
+			y: humidity,
+		}));
+
+		const ctx = document.getElementById('myChart');
+		
+		new Chart(ctx, {
+			type: 'line',
+			options: {
+				scales: {
+					temperature: {
+						type: 'linear',
+						display: true,
+						position: 'left',
+					},
+					humidity: {
+						type: 'linear',
+						display: true,
+						position: 'right',
+					},
+				}
+			},
+			data: { datasets: [ 
+				{ label: 'Humidity', data: environmentHumidityData, yAxisID: 'humidity' },
+				{ label: 'Temperature', data: environmentTemperatureData, yAxisID: 'temperature' },
+			] }
+		});
+	}
+</script>
+<script>
+	main({{ rawEnvironmentData|tojson }});
+</script>
