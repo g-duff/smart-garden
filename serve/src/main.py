@@ -8,8 +8,8 @@ from data.objects import Environment, Plant
 app = Flask(__name__)
 
 
-@app.route("/json/plant/<name>", methods=["GET", "POST"])
-def plant(name):
+@app.route("/plant/<name>/json", methods=["GET", "POST"])
+def plant_json(name):
     match request.method:
         case "GET":
             from_date = request.args.get('from', datetime.datetime.now().replace(
@@ -40,8 +40,8 @@ def plant(name):
             return ('', 204)
 
 
-@app.route("/json/environment/<name>", methods=["GET", "POST"])
-def environment(name):
+@app.route("/environment/<name>/json", methods=["GET", "POST"])
+def environment_json(name):
     match request.method:
         case "GET":
             from_date = request.args.get('from', datetime.datetime.now().replace(
