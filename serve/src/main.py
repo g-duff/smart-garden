@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 
 from data.database import Database
 from data.objects import Environment, Plant
@@ -70,6 +70,20 @@ def environment_json(name):
             database_connection.close()
 
             return ('', 204)
+
+
+@app.route("/environment/<name>/chart", methods=["GET"])
+def environment_chart(name):
+    from_date = request.args.get('from', datetime.datetime.now().replace(
+        hour=0, minute=0, second=0, microsecond=0
+        ).isoformat())
+    to_date = request.args.get('to', datetime.datetime.now().isoformat())
+
+    database_connection = Database()
+    formatted_readings = database_connection.select_environments([name], from_date, to_date)
+    database_connection.close()
+
+    return render_template('./environment.html', rawEnvironmentData=formatted_readings)
 
 
 if __name__ == '__main__':
