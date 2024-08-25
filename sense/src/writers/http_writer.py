@@ -34,7 +34,7 @@ class HttpWriter:
         jsondata = json.dumps(data)
         jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
     
-        req = urllib.request.Request(f"http://{self.hostname}/json/{object_type}/{name}")
+        req = urllib.request.Request(f"http://{self.hostname}/{object_type}/{name}/json")
         req.add_header('Content-Type', 'application/json; charset=utf-8')
     
         response = urllib.request.urlopen(req, jsondataasbytes)
