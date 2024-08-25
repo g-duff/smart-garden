@@ -37,7 +37,7 @@ def plant_json(name):
             database_connection.insert_plants(plants)
             database_connection.close()
 
-            return ('', 204)
+            return ({"message": "created"}, 201)
 
 
 @app.route("/environment/<name>/json", methods=["GET", "POST"])
@@ -69,7 +69,7 @@ def environment_json(name):
             database_connection.insert_environments(envrionments)
             database_connection.close()
 
-            return ('', 204)
+            return ({"message": "created"}, 201)
 
 
 @app.route("/environment/<name>/chart", methods=["GET"])
