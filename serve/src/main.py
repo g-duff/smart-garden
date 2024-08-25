@@ -86,5 +86,19 @@ def environment_chart(name):
     return render_template('./environment.html', rawEnvironmentData=formatted_readings)
 
 
+@app.route("/plant/<name>/chart", methods=["GET"])
+def plant_chart(name):
+    from_date = request.args.get('from', datetime.datetime.now().replace(
+        hour=0, minute=0, second=0, microsecond=0
+        ).isoformat())
+    to_date = request.args.get('to', datetime.datetime.now().isoformat())
+
+    database_connection = Database()
+    formatted_readings = database_connection.select_plants([name], from_date, to_date)
+    database_connection.close()
+
+    return render_template('./plant.html', rawPlantData=formatted_readings)
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
