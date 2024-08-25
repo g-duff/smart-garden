@@ -1,0 +1,46 @@
+<div>
+	<canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+	function main(rawPlantData) {
+		const plantMoistureData = rawPlantData.map(({moisture_percent, timestamp}) => ({
+			x: timestamp,
+			y: moisture_percent,
+		}));
+
+		const plantVoltageData = rawPlantData.map(({moisture_voltage, timestamp}) => ({
+			x: timestamp,
+			y: moisture_voltage,
+		}));
+
+		const ctx = document.getElementById('myChart');
+		
+		new Chart(ctx, {
+			type: 'line',
+			options: {
+				scales: {
+					moisture: {
+						type: 'linear',
+						display: true,
+						position: 'left',
+					},
+					voltage: {
+						type: 'linear',
+						display: true,
+						position: 'right',
+					},
+				}
+			},
+			data: { datasets: [ 
+				{ label: 'Moisture', data: plantMoistureData, yAxisID: 'moisture' },
+				{ label: 'Voltage', data: plantVoltageData, yAxisID: 'voltage' },
+			] }
+		});
+	}
+</script>
+<script>
+	main({{ rawPlantData|tojson }});
+</script>
