@@ -34,8 +34,16 @@
 						display: true,
 						position: 'right',
 					},
-					x: { type: 'time' },
-				}
+					x: {
+						type: 'time',
+						time: {
+							unit: 'hour',
+							displayFormats: {
+								hour: 'DD HH:mm',
+							},
+						},
+					},
+				},
 			},
 			data: { datasets: [
 				{ label: 'Moisture', data: plantMoistureData, yAxisID: 'moisture' },
