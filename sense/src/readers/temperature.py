@@ -19,18 +19,18 @@ def read_temperature() -> Optional[int|float]:
             sensor.exit()
             logger.info(f'Temperature: {temperature}')
             return temperature
-    
+
         except RuntimeError as error:
             # Errors happen fairly often, DHT's are hard to read, log and keep going
             logger.warning(str(error))
             time.sleep(2.0)
             continue
-    
+
         except Exception as error:
             logger.error(error)
             sensor.exit()
             break
-    
+
         except KeyboardInterrupt:
             logger.info(f'Interrupted. Exiting...')
             sensor.exit()
